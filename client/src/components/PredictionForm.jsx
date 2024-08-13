@@ -75,7 +75,12 @@ const PredictionForm = () => {
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Box display="flex" flexDirection="column" gap={1}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={1}
+        sx={{ minWidth: "10%", maxWidth: "40%" }}
+      >
         <DropDown
           key={1}
           label="Coverage"
