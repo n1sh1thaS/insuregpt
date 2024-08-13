@@ -4,61 +4,62 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import DropDown from "./DropDown";
+import axios from "axios";
 
-/*
-    'Coverage': [Basic, Extended, Premium 0-2],
-    'Education': [HS or below, College, Bachelor, Master, Doctor 0-4],
-    'Employment Status': [Unemployed, Employed, Medical Leave, Retired, Disabled 0-4], #cheaper for unemployed
-    'Location': [Rural, Suburban, Urban 0-2], #cheaper for urban area
-    'Gender': [Female, Male 0,1 ], #cheaper for M
-    'Marital Status': [Single, Married, Divorced 0-2],
-    'Vehicle Class': [Two-Door Car, Four-Door Car, Sports Car, Luxury Car, SUV, Luxury SUV 0-5],
-    'Vehicle Size': [Small, Medium, Large 0-2]
-    'Age': [18+]
-*/
+const coverageOptions = ["Basic", "Extended", "Premium"];
+const educationOptions = [
+  "High School or Below",
+  "College",
+  "Bachelor's",
+  "Master's",
+  "Doctor",
+];
+const employmentOptions = [
+  "Unemployed",
+  "Employed",
+  "Medical Leave",
+  "Retired",
+  "Disabled",
+];
+const locationOptions = ["Rural", "Suburban", "Urban"];
+const genderOptions = ["Female", "Male"];
+const maritalOptions = ["Single", "Married", "Divorced"];
+const vehicleClassOptions = [
+  "Two-Door Car",
+  "Four-Door Car",
+  "Sports Car",
+  "Luxury Car",
+  "SUV",
+  "Luxury SUV",
+];
+const vehicleSizeOptions = ["Small", "Medium", "Large"];
 
 const schema = z.object({
-  coverage: z.enum(["Basic", "Extended", "Premium"], {
+  coverage: z.enum(coverageOptions, {
     errorMap: () => ({ message: "Coverage type is required." }),
   }),
-  educationLevel: z.enum(
-    ["High School or Below", "College", "Bachelor's", "Master's", "Doctor"],
-    {
-      errorMap: () => ({ message: "Education level is required." }),
-    }
-  ),
-  employmentStatus: z.enum(
-    ["Unemployed", "Employed", "Medical Leave", "Retired", "Disabled"],
-    {
-      errorMap: () => ({ message: "Employment status is required." }),
-    }
-  ),
-  location: z.enum(["Rural", "Suburban", "Urban"], {
+  educationLevel: z.enum(educationOptions, {
+    errorMap: () => ({ message: "Education level is required." }),
+  }),
+  employmentStatus: z.enum(employmentOptions, {
+    errorMap: () => ({ message: "Employment status is required." }),
+  }),
+  location: z.enum(locationOptions, {
     errorMap: () => ({ message: "Locaiton is required." }),
   }),
-  gender: z.enum(["Male", "Female"], {
+  gender: z.enum(genderOptions, {
     errorMap: () => ({ message: "Gender is required." }),
   }),
-  maritalStatus: z.enum(["Single", "Married", "Divorced"], {
+  maritalStatus: z.enum(maritalOptions, {
     errorMap: () => ({ message: "Marital status is required." }),
   }),
   age: z
     .number({ invalid_type_error: "Age is required." })
     .gt(18, { message: "Age must be greater than 18." }),
-  vehicleClass: z.enum(
-    [
-      "Two-Door Car",
-      "Four-Door Car",
-      "Sports Car",
-      "Luxury Car",
-      "SUV",
-      "Luxury SUV",
-    ],
-    {
-      errorMap: () => ({ message: "Vehicle class is required." }),
-    }
-  ),
-  vehicleSize: z.enum(["Small", "Medium", "Large"], {
+  vehicleClass: z.enum(vehicleClassOptions, {
+    errorMap: () => ({ message: "Vehicle class is required." }),
+  }),
+  vehicleSize: z.enum(vehicleSizeOptions, {
     errorMap: () => ({ message: "Vehicle size is required." }),
   }),
 });
@@ -70,8 +71,30 @@ const PredictionForm = () => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const input = {
+      "Coverage Index": coverageOptions.indexOf(data.coverage),
+      "Education Index": educationOptions.indexOf(data.educationLevel),
+      "Employment Status Index": employmentOptions.indexOf(
+        data.employmentStatus
+      ),
+      "Location Index": locationOptions.indexOf(data.location),
+      //Gender: genderOptions.indexOf(data.gender),
+      "Marital Status Index": maritalOptions.indexOf(data.maritalStatus),
+      "Vehicle Class Index": vehicleClassOptions.indexOf(data.vehicleClass),
+      "Vehicle Size Index": vehicleSizeOptions.indexOf(data.vehicleSize),
+    };
+    input["Gender"] = genderOptions.indexOf(data.gender);
+    //does not include age
+    try {
+      const res = await axios.post("http://localhost:5000/predict", input);
+      const { prediction } = res.data;
+      console.log(prediction);
+      console.log(data);
+    } catch (err) {
+      console.log(data);
+      console.log(err);
+    }
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
