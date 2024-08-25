@@ -41,7 +41,7 @@ const PredictionForm = () => {
       display={"flex"}
       flexDirection={"column"}
       gap={2.5}
-      sx={{ minWidth: "10%", maxWidth: "40%" }}
+      sx={{ minWidth: "40%", maxWidth: "40%" }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box
