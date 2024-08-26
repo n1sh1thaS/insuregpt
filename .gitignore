@@ -4,3 +4,4 @@ insurance-model/insurance-prediction-notebook-v2.ipynb
 venv
 routes/__pycache__
 routes/__pycache__/predictions.cpython-312.pyc
+.env

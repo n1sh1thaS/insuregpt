@@ -1,11 +1,14 @@
 from flask import Blueprint, jsonify, request
 from openai import OpenAI
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
 chat_bp = Blueprint('chat', __name__)
 
 client = OpenAI(
-  organization='YOUR_ORG_ID',
-  project='$PROJECT_ID',
+  organization = os.getenv('YOUR_ORG_ID'),
+  project = os.getenv('PROJECT_ID'),
 )
 
 @chat_bp.route('/chat', methods = ['POST'])
