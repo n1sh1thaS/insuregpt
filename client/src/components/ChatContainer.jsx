@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Paper, InputBase, IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import Message from "./Message";
 
 const ChatContainer = () => {
+  const [chatHistory, setChatHistory] = useState([]);
+  //element: {"role": "user" (or assistant), "content": "this is the message"}
   return (
     <div
       style={{
@@ -22,6 +24,7 @@ const ChatContainer = () => {
           overflowY: "auto",
         }}
       >
+        {chatHistory.map(elem)}
         <Message
           color="primary"
           text="this is the message sent by the user to the chatbot on tuesday yayyy"
