@@ -6,6 +6,17 @@ import Message from "./Message";
 const ChatContainer = () => {
   const [chatHistory, setChatHistory] = useState([]);
   //element: {"role": "user" (or assistant), "content": "this is the message"}
+  const [newMessage, setNewMessage] = useState("");
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+    console.log(newMessage);
+    let newChat = chatHistory;
+    newChat.push({ role: "user", content: `${newMessage}` });
+    setChatHistory(newChat);
+    setNewMessage("");
+  };
+
   return (
     <div
       style={{
@@ -24,72 +35,58 @@ const ChatContainer = () => {
           overflowY: "auto",
         }}
       >
-        {chatHistory.map(elem)}
+        {chatHistory.map((elem) => (
+          <Message text={elem["content"]} role={elem["role"]} />
+        ))}
+        <Message text="this is the message sent by the user to the chatbot on tuesday yayyy" />
         <Message
-          color="primary"
-          text="this is the message sent by the user to the chatbot on tuesday yayyy"
-        />
-        <Message
-          color="default"
           text="this is the message sent by the chatbot to the user on wednesday yayyy"
-          bot
+          role="assistant"
         />
+        <Message text="this is the message sent by the user to the chatbot on tuesday yayyy" />
         <Message
-          color="primary"
-          text="this is the message sent by the user to the chatbot on tuesday yayyy"
-        />
-        <Message
-          color="default"
           text="this is the message sent by the chatbot"
-          bot
+          role="assistant"
         />
+        <Message text="this is the message sent by the user to the chatbot on tuesday yayyy" />
         <Message
-          color="primary"
-          text="this is the message sent by the user to the chatbot on tuesday yayyy"
-        />
-        <Message
-          color="default"
           text="this is the message sent by the chatbot"
-          bot
+          role="assistant"
         />
+        <Message text="this is the message sent by the user to the chatbot on tuesday yayyy" />
         <Message
-          color="primary"
-          text="this is the message sent by the user to the chatbot on tuesday yayyy"
-        />
-        <Message
-          color="default"
           text="this is the message sent by the chatbot"
-          bot
+          role="assistant"
         />
+        <Message text="this is the message sent by the user to the chatbot on tuesday yayyy" />
         <Message
-          color="primary"
-          text="this is the message sent by the user to the chatbot on tuesday yayyy"
-        />
-        <Message
-          color="default"
           text="this is the message sent by the chatbot"
-          bot
+          role="assistant"
         />
       </div>
-      <Paper
-        component="form"
-        sx={{
-          p: "2px 4px",
-          display: "flex",
-          alignItems: "center",
-          width: "100%",
-          position: "absolute",
-          bottom: 0,
-        }}
-      >
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Say hello to file a claim"
-        />
-        <IconButton color="primary" sx={{ p: "10px" }}>
-          <SendIcon />
-        </IconButton>
-      </Paper>
+      <form onSubmit={sendMessage}>
+        <Paper
+          sx={{
+            p: "2px 4px",
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            position: "absolute",
+            bottom: 0,
+          }}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Say hello to file a claim"
+            onChange={(res) => {
+              setNewMessage(res.target.value);
+            }}
+          />
+          <IconButton color="primary" type="submit" sx={{ p: "10px" }}>
+            <SendIcon />
+          </IconButton>
+        </Paper>
+      </form>
     </div>
   );
 };

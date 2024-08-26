@@ -3,16 +3,16 @@ import { Box, Chip } from "@mui/material";
 import FaceIcon from "@mui/icons-material/Face";
 
 const Message = (props) => {
-  const { color, text, bot } = props;
+  const { text, role } = props;
   return (
     <>
       <Box
         display="flex"
-        justifyContent={bot === true ? "flex-start" : "flex-end"}
+        justifyContent={role === "assistant" ? "flex-start" : "flex-end"}
       >
         <Chip
           sx={{
-            margin: "2%",
+            margin: "1%",
             padding: "1%",
             maxWidth: "50%",
             height: "auto",
@@ -21,8 +21,8 @@ const Message = (props) => {
               whiteSpace: "normal",
             },
           }}
-          color={color}
-          icon={bot && <FaceIcon />}
+          color={role === "assistant" ? "default" : "primary"}
+          icon={role === "assistant" ? <FaceIcon /> : null}
           label={text}
         />
       </Box>
