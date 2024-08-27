@@ -14,6 +14,7 @@ const Message = (props) => {
           sx={{
             margin: "1%",
             padding: "1%",
+            width: "fit-content",
             maxWidth: "50%",
             height: "auto",
             "& .MuiChip-label": {

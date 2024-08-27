@@ -14,10 +14,10 @@ client = OpenAI(
 @chat_bp.route('/chat', methods = ['POST'])
 def chat():
     try: 
-        messages = request.json['messages']
+        chatHistory = request.json['messages']
         completion = client.chat.completions.create(
             model = "gpt-4o-mini",
-            messages=[{"role": "system", "content": "You're a car insurance claim agent"}] + messages,
+            messages=[{"role": "system", "content": "You're a car insurance claim agent"}] + chatHistory,
         )
         return jsonify({'completion': completion.choices[0].message['content']})
     except Exception as e:

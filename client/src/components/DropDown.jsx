@@ -23,8 +23,10 @@ const DropDown = (props) => {
             label={label}
             defaultValue={""}
           >
-            {options.map((option) => (
-              <MenuItem value={option}>{option}</MenuItem>
+            {options.map((option, index) => (
+              <MenuItem key={index} value={option}>
+                {option}
+              </MenuItem>
             ))}
           </Select>
           <FormHelperText>
