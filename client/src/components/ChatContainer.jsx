@@ -9,8 +9,12 @@ input field expand when text is larger (expands to cover bottom messages)*/
 
 const ChatContainer = () => {
   const messageListRef = useRef(null);
-  const [chatHistory, setChatHistory] = useState([]);
-  //element: {"role": "user" (or assistant), "content": "this is the message"}
+  const [chatHistory, setChatHistory] = useState([
+    {
+      role: "assistant",
+      content: "Hey! I'm here to help you file a car insurance claim.",
+    },
+  ]);
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
@@ -20,25 +24,20 @@ const ChatContainer = () => {
   const sendMessage = async (event) => {
     event.preventDefault();
     try {
-      //add user message to chathistory
-      console.log(newMessage);
-      setChatHistory([
+      const newChatHistory = [
         ...chatHistory,
         { role: "user", content: `${newMessage}` },
-      ]);
+      ];
       setNewMessage("");
 
-      /*get chatcompletion based on new chat records
-      const chatCompletion = await getChatCompletion(chatHistory);
-      console.log(chatCompletion);
+      const chatCompletion = await getChatCompletion(newChatHistory);
 
-      //add chatcompletion to chat records
       setChatHistory([
-        ...chatHistory,
+        ...newChatHistory,
         { role: "assistant", content: `${chatCompletion}` },
-      ]);*/
+      ]);
     } catch (err) {
-      console.log("Err!", err);
+      console.log("Error:", err);
     }
   };
 
@@ -60,37 +59,11 @@ const ChatContainer = () => {
           overflowY: "auto",
         }}
       >
-        <ul ref={messageListRef}>
+        <ul ref={messageListRef} style={{ paddingInlineStart: "0px" }}>
           {chatHistory.map((elem, index) => (
-            <Message key={index} text={elem["content"]} role={elem["role"]} />
+            <Message key={index} text={elem.content} role={elem.role} />
           ))}
         </ul>
-        {/*these are some messages for testing purposes*/}
-        <Message text="this is the message sent by the user to the chatbot on tuesday yayyy" />
-        <Message
-          text="this is the message sent by the chatbot to the user on wednesday yayyy"
-          role="assistant"
-        />
-        <Message text="this is the message sent by the user to the chatbot on tuesday yayyy" />
-        <Message
-          text="this is the message sent by the chatbot"
-          role="assistant"
-        />
-        <Message text="this is the message sent by the user to the chatbot on tuesday yayyy" />
-        <Message
-          text="this is the message sent by the chatbot"
-          role="assistant"
-        />
-        <Message text="this is the message sent by the user to the chatbot on tuesday yayyy" />
-        <Message
-          text="this is the message sent by the chatbot"
-          role="assistant"
-        />
-        <Message text="this is the message sent by the user to the chatbot on tuesday yayyy" />
-        <Message
-          text="this is the message sent by the chatbot"
-          role="assistant"
-        />
       </div>
       <form onSubmit={sendMessage}>
         <Paper
