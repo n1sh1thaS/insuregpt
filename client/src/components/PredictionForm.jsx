@@ -28,8 +28,6 @@ const PredictionForm = () => {
   const onSubmit = async (data) => {
     try {
       const premiumQuote = await getPrediction(data);
-      console.log(premiumQuote);
-      //TAKE AGE INTO ACCOUNT!! REVERSE VALS
       setQuote(premiumQuote);
     } catch (err) {
       console.log(err);
